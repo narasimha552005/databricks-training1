@@ -1,1 +1,137 @@
+31.SELECT *
+FROM Employee
+ORDER BY salary ASC;
 
+32.SELECT *
+FROM Employee
+ORDER BY age DESC;
+
+33.SELECT *
+FROM Employee
+ORDER BY hire_date ASC;
+
+34.SELECT *
+FROM Employee
+ORDER BY department_id ASC, salary ASC;
+
+35.SELECT 
+    department_id,
+    SUM(salary) AS total_salary
+FROM Employee
+GROUP BY department_id
+ORDER BY total_salary DESC;
+
+36.SELECT 
+    Employee.name AS employee_name,
+    Department.name AS department_name
+FROM Employee
+INNER JOIN Department
+ON Employee.department_id = Department.department_id;
+
+37.SELECT 
+    Project.name AS project_name,
+    Department.name AS department_name
+FROM Project
+INNER JOIN Department
+ON Project.department_id = Department.department_id;
+
+38.SELECT 
+    Employee.name AS employee_name,
+    Project.name AS project_name
+FROM Employee
+INNER JOIN Project
+ON Employee.department_id = Project.department_id;
+
+39.SELECT 
+    Employee.name AS employee_name,
+    Department.name AS department_name
+FROM Employee
+LEFT JOIN Department
+ON Employee.department_id = Department.department_id;
+
+40.SELECT 
+    Department.name AS department_name,
+    Employee.name AS employee_name
+FROM Department
+LEFT JOIN Employee
+ON Department.department_id = Employee.department_id;
+
+41.SELECT 
+    Employee.name
+FROM Employee
+LEFT JOIN Project
+ON Employee.department_id = Project.department_id
+WHERE Project.project_id IS NULL;
+
+42.SELECT 
+    Employee.name AS employee_name,
+    COUNT(Project.project_id) AS total_projects
+FROM Employee
+LEFT JOIN Project
+ON Employee.department_id = Project.department_id
+GROUP BY Employee.name;
+
+43.SELECT 
+    Department.name
+FROM Department
+LEFT JOIN Employee
+ON Department.department_id = Employee.department_id
+WHERE Employee.emp_id IS NULL;
+
+44.SELECT name
+FROM Employee
+WHERE department_id = (
+    SELECT department_id
+    FROM Employee
+    WHERE name = 'John Doe'
+)
+AND name <> 'John Doe';
+
+45.SELECT 
+    Department.name AS department_name,
+    AVG(Employee.salary) AS average_salary
+FROM Employee
+INNER JOIN Department
+ON Employee.department_id = Department.department_id
+GROUP BY Department.name
+ORDER BY average_salary DESC
+LIMIT 1;
+
+46.SELECT *
+FROM Employee
+WHERE salary = (
+    SELECT MAX(salary)
+    FROM Employee
+);
+
+47.SELECT *
+FROM Employee
+WHERE salary > (
+    SELECT AVG(salary)
+    FROM Employee
+);
+
+48.SELECT MAX(salary) AS second_highest_salary
+FROM Employee
+WHERE salary < (
+    SELECT MAX(salary)
+    FROM Employee
+);
+
+49.SELECT 
+    Department.name AS department_name,
+    COUNT(Employee.emp_id) AS total_employees
+FROM Employee
+INNER JOIN Department
+ON Employee.department_id = Department.department_id
+GROUP BY Department.name
+ORDER BY total_employees DESC
+LIMIT 1;
+
+50.SELECT *
+FROM Employee e1
+WHERE salary > (
+    SELECT AVG(salary)
+    FROM Employee e2
+    WHERE e1.department_id = e2.department_id
+);
