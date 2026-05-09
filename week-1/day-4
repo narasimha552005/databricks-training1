@@ -1,0 +1,126 @@
+--inner join example on my own
+select *
+from Student
+inner join Class on Student.ClassesID = Class.ClassesID;
+
+select * 
+from Class
+inner join Teachers on Class.TeacherID=Teachers.TeacherID;
+
+--left join
+
+select *
+from Student
+left join Class on Student.ClassesID=Class.ClassesID
+
+-- left anti join
+select *
+from Student
+left join Class on Student.ClassesID=Class.ClassesID
+where Class.ClassesID is null;
+
+ -- right join
+
+ select *
+ from Student
+ right join Class on Student.ClassesID = Class.ClassesID
+ union 
+ select *
+ from Student
+ left join Class on Student.ClassesID= Class.ClassesID; 
+
+
+  select *
+ from Student
+ full join Class on Student.ClassesID= Class.ClassesID
+ where  Student.ClassesID is null or Class.ClassesID is null;
+
+--this example on my own
+  create database vishnuDB
+
+use vishnuDB
+
+create table Student(
+ Stu_id int primary key,
+ Stu_name VARCHAR(30),
+ age int,
+ Subject varchar(10)
+ );
+
+ insert into Student values 
+(101, 'Rahul', 20, 'Maths'),
+(102, 'Anjali', 19, 'Physics'),
+(103, 'Kiran', 21, 'Chem'),
+(104, 'Sneha', 20, 'Biology'),
+(105, 'Ravi', 22, 'English'),
+(106, 'Priya', 18, 'Maths'),
+(107, 'Vikram', 21, 'Physics'),
+(108, 'Divya', 19, 'Chem'),
+(109, 'Arjun', 20, 'Biology'),
+(110, 'Keerthi', 22, 'English');
+
+
+select *
+from Student
+
+create table Student1(
+ Stu_id int primary key,
+ Stu_name VARCHAR(30),
+ age int,
+ Subject varchar(10)
+ ); 
+
+ insert into Student1 values
+ (000,'narasi', 21, 'maths')
+ (106, 'Priya', 18, 'Maths'),
+(107, 'Vikram', 21, 'Physics'),
+(108, 'Divya', 19, 'Chem'),
+(109, 'Arjun', 20, 'Biology'),
+(110, 'Keerthi', 22, 'English')
+
+ (111, 'Suresh', 20, 'History'),
+(112, 'Lavanya', 19, 'Economics'),
+(113, 'Manoj', 21, 'Maths'),
+(114, 'Deepika', 22, 'Physics'),
+(115, 'Naveen', 20, 'Chem'),
+(116, 'Harika', 18, 'Biology'),
+(117, 'Tarun', 23, 'English'),
+(118, 'Bhavya', 19, 'History'),
+(119, 'Charan', 21, 'Economics'),
+(120, 'Meghana', 20, 'Maths')
+(107, 'Vikram', 21, 'Physics'),
+(108, 'Divya', 19, 'Chem'),
+(109, 'Arjun', 20, 'Biology'),
+(110, 'Keerthi', 22, 'English');
+
+select *
+from Student1
+
+select *from Student 
+union 
+select * from Student1 
+
+select *from Student 
+union all
+select * from Student1 
+
+select *from Student 
+intersect
+select * from Student1 ;
+
+SELECT Stu_id, Stu_name,age,Subject
+FROM Student
+
+intersect
+
+SELECT *
+FROM Student1;
+
+SELECT *
+FROM Student
+except
+SELECT *
+FROM Student1;
+
+
+
