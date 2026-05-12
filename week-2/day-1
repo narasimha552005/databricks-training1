@@ -1,1 +1,262 @@
+--I have created a database to practice SQL using the database images you sent.
+--database name college management service
+
+
+create database cms;
+
+use cms
+
+--department
+ create table department(
+   dep_id int primary key,
+   dep_name varchar(30),
+   dep_block_no int
+   );
+
+--student
+create table student(
+   stu_id int primary key,
+   stu_name varchar(30),
+   age int,
+   address varchar(100),
+   city varchar,
+   dep_id int,
+   foreign key (dep_id) references Department(dep_id)
+   );
+
+--staff
+create table staff(
+  staff_id int primary key,
+  staff_name varchar(100),
+  dep_id int,
+  foreign key(dep_id) references Department(dep_id)
+  );
+
+--suject
+create table subject(
+  sub_id int primary key,
+  sub_name varchar(20),
+  sub_code int,
+  staff_id int,
+  foreign key (staff_id)
+  references Staff(staff_id)
+  );
+--marks
+
+create table marks(
+  result int,
+  sub_id INT,
+  stu_id INT,
+
+    PRIMARY KEY (sub_id, stu_id),
+
+    FOREIGN KEY (sub_id)
+    REFERENCES Subject(sub_id),
+
+    FOREIGN KEY (stu_id)
+    REFERENCES Student(stu_id)
+    );
+
+ALTER TABLE student
+ALTER COLUMN city VARCHAR(30);
+
+alter table student
+add country varchar(20);
+
+
+
+
+
+select *
+from department
+
+select *
+from marks
+
+select *
+from staff
+
+select *
+from student
+
+select *
+from subject
+
+INSERT INTO department VALUES
+(1, 'CSE', 101),
+(2, 'ECE', 102),
+(3, 'EEE', 103),
+(4, 'MECH', 104),
+(5, 'CIVIL', 105),
+(6, 'IT', 106),
+(7, 'AI', 107),
+(8, 'DS', 108),
+(9, 'MBA', 109),
+(10, 'BBA', 110);
+
+INSERT INTO student VALUES
+(78475, 'Rahul', 20, 'Ameerpet', 'Hyderabad', 1, 'India'),
+(78476, 'Anjali', 21, 'Madhapur', 'Hyderabad', 2, 'India'),
+(78477, 'Kiran', 19, 'Benz Circle', 'Vijayawada', 3, 'GERMANY'),
+(78478, 'Sneha', 22, 'Governorpet', 'Vijayawada', 4, 'India'),
+(78479, 'Arjun', 20, 'Dwaraka Nagar', 'Visakhapatnam', 5, 'USA'),
+(78480, 'Pooja', 21, 'MVP Colony', 'Visakhapatnam', 6, 'GERMANY'),
+(78481, 'Vikas', 23, 'Kukatpally', 'Hyderabad', 7, 'UAE'),
+(78482, 'Meena', 20, 'Gachibowli', 'Hyderabad', 8, 'USA'),
+(78483, 'Tarun', 22, 'Brodipet', 'Guntur', 9, 'UK'),
+(78484, 'Divya', 21, 'Lakdikapul', 'london', 10, 'UK');
+
+INSERT INTO staff VALUES
+(201, 'Ramesh', 1),
+(202, 'Suresh', 2),
+(203, 'Mahesh', 3),
+(204, 'Kavitha', 4),
+(205, 'Priya', 5),
+(206, 'Naresh', 6),
+(207, 'Harish', 7),
+(208, 'Deepika', 8),
+(209, 'Swathi', 9),
+(210, 'Lokesh', 10);
+
+
+INSERT INTO subject VALUES
+(301, 'DBMS', 1001, 201),
+(302, 'Digital Electronics', 1002, 202),
+(303, 'Power Systems', 1003, 203),
+(304, 'Thermodynamics', 1004, 204),
+(305, 'Surveying', 1005, 205),
+(306, 'Python', 1006, 206),
+(307, 'Machine Learning', 1007, 207),
+(308, 'Data Science', 1008, 208),
+(309, 'Management', 1009, 209),
+(310, 'Accounting', 1010, 210);
+
+INSERT INTO Marks VALUES
+(85, 301, 78475),
+(78, 302, 78476),
+(91, 303, 78477),
+(88, 304, 78478),
+(76, 305, 78479),
+(95, 306, 78480),
+(89, 307, 78481),
+(84, 308, 78482),
+(73, 309, 78483),
+(90, 310, 78484);
+
+DELETE FROM Marks;
+DELETE FROM Subject;
+DELETE FROM Staff;
+DELETE FROM Student;
+DELETE FROM Department;
+
+select *
+from department
+
+select *
+from marks
+
+select *
+from staff
+
+select *
+from student
+
+select *
+from subject
+
+--students and their departments from each city 
+
+select stu_name,dep_name
+from student s
+full join department d on s.dep_id = d.dep_id
+where city='Hyderabad'
+order by stu_name;
+
+-- top 5 marks
+
+select top 5 stu_name ,result
+from student s
+join marks m on m.stu_id=s.stu_id
+order by m.result desc
+
+--basic questions
+
+select *
+from student
+where city ='Hyderabad' or city = 'Vijayawada';
+
+select * from student
+where age > 20;
+
+select *
+from student
+order by stu_name asc
+
+select top 3*
+from student
+order by age desc
+
+select top 3*
+from student
+order by age asc
+
+select stu_name,dep_name
+from student s
+join department d on s.dep_id= d.dep_id
+
+select stu_name,dep_block_no
+from student s
+join department d on s.dep_id= d.dep_id
+
+select stu_name,dep_name,city
+from student s
+join department d on s.dep_id= d.dep_id
+
+select stu_name,su.sub_name,result
+from student s 
+join marks m on s.stu_id=m.stu_id 
+join subject su on m.sub_id=su.sub_id
+
+select stu_name, 
+from student s
+join department d on s.dep_id=d.dep_id
+join marks m on s.stu_id=m.stu_id
+join subject su on m.sub_id= su.sub_id
+
+select *
+from student s
+join department d on s.dep_id=d.dep_id
+join staff st on d.dep_id=st.dep_id
+join marks m on s.stu_id=m.stu_id
+join subject su on m.sub_id= su.sub_id
+
+select count(*)
+from student
+
+select avg(result) as avg_marks
+from marks
+
+select max(result) as highest_marks
+from marks
+
+select d.dep_name,
+count(stu_id) as total_students
+from department d
+left join student s on d.dep_id=s.dep_id
+group by d.dep_name
+
+--GROUP CLAUSE WITH AGGREGATES
+
+select * from student
+
+select country ,count(stu_id) as total_students
+from  student
+group by country
+
+select dep_name,count(*) as total_students
+from department d
+join student s on  d.dep_id=s.dep_id
+group by dep_name
+
+
 
