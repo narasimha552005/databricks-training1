@@ -249,6 +249,26 @@ WHERE fare_amount < (
     FROM rentals
 );
 
+select *
+from customers c
+left join rentals r on c.customer_id=r.customer_id
+where r.customer_id is null
+
+SELECT *
+FROM rentals
+WHERE pickup_date BETWEEN '2025-05-01' AND '2025-05-10';
+
+select own_name 
+from owners o
+join cars c on o.own_id=c.own_id; 
+
+SELECT o.own_name,
+       c.car_id,
+       c.car_name,
+       c.car_type
+FROM owners o
+JOIN cars c
+
 
 
 
