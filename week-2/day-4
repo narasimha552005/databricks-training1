@@ -1,0 +1,178 @@
+--window functions
+
+  select customer_name,hotel_item,rating,
+         row_number() over(order by rating desc) as Popularity
+from hotel_details h
+join orders o on h.hotel_id=o.hotel_id 
+join customers c on c.customer_id=o.customer_id 
+
+
+           
+select customer_name,count(hotel_item) as total      
+from hotel_details h
+join orders o on h.hotel_id=o.hotel_id 
+join customers c on c.customer_id=o.customer_id
+group by customer_name
+
+
+  
+select customer_name,hotel_item,rating,
+         row_number() over(order by rating desc) as Popularity,
+         rank()       over(order by rating desc) as Popularity_r,
+         dense_rank() over(order by rating desc) as Popularity_dr
+from hotel_details h
+join orders o on h.hotel_id=o.hotel_id 
+join customers c on c.customer_id=o.customer_id 
+
+           
+--it skips 2,3,4,5,6 ranks for high ratings the it continous with 7 
+select customer_name,hotel_item,rating,
+         rank()       over(order by rating desc) as Popularity_r        
+from hotel_details h
+join orders o on h.hotel_id=o.hotel_id 
+join customers c on c.customer_id=o.customer_id 
+
+           
+ 
+-- gives high rank with 1 and then second with second
+select customer_name,hotel_item,rating,
+        dense_rank() over(order by rating desc) as Popularity_dr
+from hotel_details h
+join orders o on h.hotel_id=o.hotel_id 
+join customers c on c.customer_id=o.customer_id 
+
+  -- 1 Row Number per department
+SELECT *, ROW_NUMBER() OVER(PARTITION BY department ORDER BY salary DESC) AS rn
+FROM Employees;
+
+-- 2 Rank per department
+SELECT *, RANK() OVER(PARTITION BY department ORDER BY salary DESC) AS rnk
+FROM Employees;
+
+-- 3 Dense Rank per department
+SELECT *, DENSE_RANK() OVER(PARTITION BY department ORDER BY salary DESC) AS drnk
+FROM Employees;
+
+-- 4 Unique sequence number
+SELECT *, ROW_NUMBER() OVER(ORDER BY salary DESC) AS seq_no
+FROM Employees;
+
+-- 5 Count per department
+SELECT *, COUNT(*) OVER(PARTITION BY department) AS dept_count
+FROM Employees;
+
+-- 6 Max salary per department
+SELECT *, MAX(salary) OVER(PARTITION BY department) AS max_salary
+FROM Employees;
+
+-- 7 Second highest salary per department
+SELECT *
+FROM (
+    SELECT *, DENSE_RANK() OVER(PARTITION BY department ORDER BY salary DESC) AS drnk
+    FROM Employees
+) t
+WHERE drnk = 2;
+
+-- 8 Previous salary (LAG)
+SELECT *, LAG(salary) OVER(PARTITION BY department ORDER BY salary) AS prev_salary
+FROM Employees;
+
+-- 9 Next salary (LEAD)
+SELECT *, LEAD(salary) OVER(PARTITION BY department ORDER BY salary) AS next_salary
+FROM Employees;
+
+-- 10 Salary difference with previous row
+SELECT *, salary - LAG(salary) OVER(ORDER BY emp_id) AS diff
+FROM Employees;
+
+-- 11 Running total
+SELECT *, SUM(salary) OVER(PARTITION BY department ORDER BY emp_id) AS running_total
+FROM Employees;
+
+-- 12 Average salary per department
+SELECT *, AVG(salary) OVER(PARTITION BY department) AS avg_salary
+FROM Employees;
+
+-- 13 Top 3 salaries per department
+SELECT *
+FROM (
+    SELECT *, DENSE_RANK() OVER(PARTITION BY department ORDER BY salary DESC) AS drnk
+    FROM Employees
+) t
+WHERE drnk <= 3;
+
+-- 14 Employees above department average
+SELECT *
+FROM (
+    SELECT *, AVG(salary) OVER(PARTITION BY department) AS avg_sal
+    FROM Employees
+) t
+WHERE salary > avg_sal;
+
+-- 15 Min salary per department
+SELECT *, MIN(salary) OVER(PARTITION BY department) AS min_salary
+FROM Employees;
+
+-- 16 First & Last salary per department
+SELECT *,
+FIRST_VALUE(salary) OVER(PARTITION BY department ORDER BY salary DESC) AS highest,
+LAST_VALUE(salary) OVER(
+    PARTITION BY department
+    ORDER BY salary DESC
+    ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+) AS lowest
+FROM Employees;
+
+-- 17 NTILE grouping
+SELECT *, NTILE(4) OVER(ORDER BY salary DESC) AS salary_group
+FROM Employees;
+
+-- 18 Difference from max salary
+SELECT *, salary - MAX(salary) OVER(PARTITION BY department) AS diff_from_max
+FROM Employees;
+
+-- 19 Duplicate salary detection
+SELECT *
+FROM (
+    SELECT *, COUNT(*) OVER(PARTITION BY salary) AS cnt
+    FROM Employees
+) t
+WHERE cnt > 1;
+
+-- 20 Salary gap per department
+SELECT DISTINCT department,
+MAX(salary) OVER(PARTITION BY department) -
+MIN(salary) OVER(PARTITION BY department) AS salary_gap
+FROM Employees;
+
+-- 21 Second highest salary overall
+SELECT *
+FROM (
+    SELECT *, DENSE_RANK() OVER(ORDER BY salary DESC) AS drnk
+    FROM Employees
+) t
+WHERE drnk = 2;
+
+-- 22 Consecutive salary comparison
+SELECT *,
+LAG(salary) OVER(ORDER BY emp_id) AS prev_sal
+FROM Employees;        
+
+select customer_name,hotel_item,rating,
+       lead(rating) over(order by rating desc) as next_rank
+from hotel_details h
+join orders o on h.hotel_id=o.hotel_id 
+join customers c on c.customer_id=o.customer_id 
+
+
+select gender,name,ranks,
+    row_number() over(partition by gender order by ranks asc) as highest    
+from intern;
+
+SELECT 
+    name,
+    ranks,
+    LEAD(ranks) OVER(ORDER BY ranks) AS next_rank
+FROM intern;
+
+  
