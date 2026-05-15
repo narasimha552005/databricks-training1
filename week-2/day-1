@@ -258,5 +258,54 @@ from department d
 join student s on  d.dep_id=s.dep_id
 group by dep_name
 
+SELECT s.stu_name, m.result
+FROM student s
+INNER JOIN marks m
+    ON s.student_id = m.student_id
+ORDER BY m.result DESC
+LIMIT 5;
 
+SELECT TOP 5 stu_name, result
+FROM student
+ORDER BY result DESC;
 
+SELECT s.student_name, d.department_name
+FROM student s
+INNER JOIN department d
+    ON s.department_id = d.department_id
+WHERE s.city = 'Coimbatore'
+ORDER BY s.student_name;
+
+SELECT 
+    s.stu_name,
+    d.dep_name,
+    sub.sub_name
+FROM student s
+INNER JOIN department d
+    ON s.dep_id = d.dep_id
+INNER JOIN marks m
+    ON s.stu_id = m.stu_id
+INNER JOIN subject sub
+    ON m.sub_id = sub.sub_id;
+
+SELECT s.stu_name, AVG(m.result) AS avg_marks
+FROM student s
+JOIN marks m ON s.stu_id = m.stu_id
+GROUP BY s.stu_name;
+
+SELECT 
+    d.dep_name,
+    COUNT(s.stu_id) AS total_students
+FROM department d
+LEFT JOIN student s
+    ON d.dep_id = s.dep_id
+GROUP BY d.dep_name;
+
+SELECT 
+    d.dep_name,
+    COUNT(s.stu_id) AS total_students
+FROM department d
+LEFT JOIN student s
+    ON d.dep_id = s.dep_id
+GROUP BY d.dep_name
+ORDER BY total_students DESC;
