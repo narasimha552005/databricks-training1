@@ -1,0 +1,189 @@
+--based on hotels database 
+create database KayaHotelDB
+
+use KayaHotelDB
+
+create table customers(
+  customer_id varchar(20) primary key,
+  customer_name varchar(30),
+  address varchar(40),
+  phone_no bigint,
+  email_id varchar(50)
+  );
+
+create table delivery(
+  partner_id varchar(40) primary key,
+  partner_name varchar(20),
+  phone_no bigint,
+  rating int
+  );
+
+CREATE TABLE hotel_details (
+    hotel_id VARCHAR(20) PRIMARY KEY,
+    hotel_name VARCHAR(20),
+    hotel_type VARCHAR(20),
+    rating INT
+);
+
+
+
+create table orders(
+  order_id varchar(20)primary key,
+  customer_id varchar(20),
+  hotel_id varchar(20),
+  partner_id varchar(40),
+  order_date DATE,
+  order_amount int,
+  foreign key (customer_id) references customers(customer_id),
+  foreign key (hotel_id) references hotel_details(hotel_id),
+  foreign key (partner_id) references delivery (partner_id),
+  );
+
+INSERT INTO customers VALUES
+('C101', 'Rahul', 'Hyderabad', 9876543210, 'rahul@gmail.com'),
+('C102', 'Sneha', 'Chennai', 9876543211, 'sneha@gmail.com'),
+('C103', 'Arjun', 'Bangalore', 9876543212, 'arjun@gmail.com'),
+('C104', 'Priya', 'Mumbai', 9876543213, 'priya@gmail.com'),
+('C105', 'Kiran', 'Delhi', 9876543214, 'kiran@gmail.com'),
+('C106', 'Teja', 'Warangal', 9876543215, 'teja@gmail.com'),
+('C107', 'Divya', 'Vijayawada', 9876543216, 'divya@gmail.com'),
+('C108', 'Manoj', 'Guntur', 9876543217, 'manoj@gmail.com'),
+('C109', 'Pooja', 'Nellore', 9876543218, 'pooja@gmail.com'),
+('C110', 'Rakesh', 'Tirupati', 9876543219, 'rakesh@gmail.com');
+
+
+INSERT INTO delivery VALUES
+('P101', 'Swiggy', 9123456780, 5),
+('P102', 'Zomato', 9123456781, 4),
+('P103', 'Dunzo', 9123456782, 4),
+('P104', 'UberEats', 9123456783, 5),
+('P105', 'Foodie', 9123456784, 3),
+('P106', 'QuickBite', 9123456785, 4),
+('P107', 'FastTrack', 9123456786, 5),
+('P108', 'FoodExpress', 9123456787, 3),
+('P109', 'Speedy', 9123456788, 4),
+('P110', 'GoFood', 9123456789, 5);
+
+
+INSERT INTO hotel_details VALUES
+('H101', 'Paradise', 'Biryani', 5),
+('H102', 'A2B', 'Veg', 4),
+('H103', 'KFC', 'FastFood', 4),
+('H104', 'Dominos', 'Pizza', 5),
+('H105', 'Mehfil', 'Biryani', 4),
+('H106', 'Subway', 'FastFood', 4),
+('H107', 'PizzaHut', 'Pizza', 5),
+('H108', 'Udupi', 'Veg', 3),
+('H109', 'Barbeque', 'BBQ', 5),
+('H110', 'Bawarchi', 'Biryani', 5);
+
+INSERT INTO orders VALUES
+('O101', 'C101', 'H101', 'P101', '2025-05-01', 500),
+('O102', 'C102', 'H102', 'P102', '2025-05-02', 300),
+('O103', 'C103', 'H103', 'P103', '2025-05-03', 450),
+('O104', 'C104', 'H104', 'P104', '2025-05-04', 700),
+('O105', 'C105', 'H105', 'P105', '2025-05-05', 600),
+('O106', 'C101', 'H101', 'P106', '2025-05-06', 550),
+('O107', 'C102', 'H107', 'P107', '2025-05-07', 750),
+('O108', 'C106', 'H110', 'P108', '2025-05-08', 900),
+('O109', 'C107', 'H103', 'P109', '2025-05-09', 400),
+('O110', 'C109', 'H101', 'P110', '2025-05-10', 650);
+
+  select * from[dbo].[customers] 
+   select * from [dbo].[delivery]
+    select * from [dbo].[hotel_details]
+     select * from [dbo].[orders]
+
+select customer_name,hotel_name
+from customers c
+join orders o on c.customer_id=o.customer_id
+join hotel_details h on o.hotel_id=h.hotel_id
+
+select customer_name,hotel_name,partner_name
+from customers c
+join orders o on c.customer_id=o.customer_id
+join hotel_details h on o.hotel_id=h.hotel_id
+join delivery d on o.partner_id=d.partner_id
+
+select *
+from orders o
+join customers c on o.customer_id=c.customer_id
+where customer_name = 'rahul'
+
+select  h.hotel_name,
+       c.customer_name,
+       c.address
+from hotel_details h
+join orders o on h.hotel_id=o.hotel_id
+join customers c on o.customer_id=c.customer_id
+where c.address='Hyderabad'
+
+select customer_name,partner_name
+from customers c
+join orders o on c.customer_id=o.customer_id
+join delivery d on o.partner_id = d.partner_id
+where partner_name ='swiggy'
+
+select order_id,order_date,order_amount,hotel_name,rating
+from orders o
+join hotel_details h on o.hotel_id=h.hotel_id
+
+select c.customer_name ,count(order_id) as total_orders
+from orders o
+join customers c on o.customer_id=c.customer_id
+group by c.customer_name
+
+select c.customer_name ,avg(order_amount) as average
+from orders o 
+join customers c on o.customer_id=c.customer_id
+group by c.customer_name
+
+select hotel_type , count(hotel_name) as total
+from hotel_details
+group by hotel_type
+
+select customer_name, max(order_amount) as highest
+from orders o
+join customers c on o.customer_id=c.customer_id
+group by customer_name
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
