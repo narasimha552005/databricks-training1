@@ -176,6 +176,216 @@ select *
 from rentals
 where fare_amount>6000
 
+-- 1. Display all available cars
+SELECT * FROM cars;
+
+-- 2. Show only SUV cars
+SELECT * 
+FROM cars
+WHERE car_type = 'SUV';
+
+-- 3. Show customers from Hyderabad
+SELECT *
+FROM customers
+WHERE address = 'Hyderabad';
+
+-- 4. Find rentals with fare greater than 6000
+SELECT *
+FROM rentals
+WHERE fare_amount > 6000;
+
+-- 5. Display car names and their owners
+SELECT c.car_name, o.own_name
+FROM cars c
+JOIN owners o
+ON c.own_id = o.own_id;
+
+-- 6. Show customer name and rented car
+SELECT cu.customer_name, ca.car_name
+FROM rentals r
+JOIN customers cu
+ON r.customer_id = cu.customer_id
+JOIN cars ca
+ON r.car_id = ca.car_id;
+
+-- 7. Find cars not rented
+SELECT car_id, car_name
+FROM cars
+WHERE car_id NOT IN (
+    SELECT car_id FROM rentals
+);
+
+-- 8. Count total cars
+SELECT COUNT(*) AS total_cars
+FROM cars;
+
+-- 9. Count total rentals
+SELECT COUNT(*) AS total_rentals
+FROM rentals;
+
+-- 10. Find maximum fare amount
+SELECT MAX(fare_amount) AS highest_fare
+FROM rentals;
+
+-- 11. Find minimum fare amount
+SELECT MIN(fare_amount) AS lowest_fare
+FROM rentals;
+
+-- 12. Find average fare amount
+SELECT AVG(fare_amount) AS average_fare
+FROM rentals;
+
+-- 13. Show rentals sorted by fare amount descending
+SELECT *
+FROM rentals
+ORDER BY fare_amount DESC;
+
+-- 14. Find total km driven
+SELECT SUM(km_driven) AS total_km
+FROM rentals;
+
+-- 15. Display customers whose name starts with 'R'
+SELECT *
+FROM customers
+WHERE customer_name LIKE 'R%';
+
+-- 16. Display cars whose name ends with 'a'
+SELECT *
+FROM cars
+WHERE car_name LIKE '%a';
+
+-- 17. Find all hatchback cars
+SELECT *
+FROM cars
+WHERE car_type = 'Hatchback';
+
+-- 18. Show rental details with customer and car names
+SELECT r.rental_id,
+       cu.customer_name,
+       ca.car_name,
+       r.pickup_date,
+       r.return_date
+FROM rentals r
+JOIN customers cu
+ON r.customer_id = cu.customer_id
+JOIN cars ca
+ON r.car_id = ca.car_id;
+
+-- 19. Find owner of CAR110
+SELECT o.own_name
+FROM owners o
+JOIN cars c
+ON o.own_id = c.own_id
+WHERE c.car_id = 'CAR110';
+
+-- 20. Find customers who rented SUV cars
+SELECT cu.customer_name, ca.car_name
+FROM rentals r
+JOIN customers cu
+ON r.customer_id = cu.customer_id
+JOIN cars ca
+ON r.car_id = ca.car_id
+WHERE ca.car_type = 'SUV';
+
+-- 21. Find cars rented after 2025-05-10
+SELECT *
+FROM rentals
+WHERE pickup_date > '2025-05-10';
+
+-- 22. Display cars with fare greater than average fare
+SELECT *
+FROM rentals
+WHERE fare_amount > (
+    SELECT AVG(fare_amount)
+    FROM rentals
+);
+
+-- 23. Find total rentals for each car
+SELECT car_id, COUNT(*) AS total_rentals
+FROM rentals
+GROUP BY car_id;
+
+-- 24. Find total fare collected for each car
+SELECT car_id, SUM(fare_amount) AS total_income
+FROM rentals
+GROUP BY car_id;
+
+-- 25. Find number of cars by type
+SELECT car_type, COUNT(*) AS total
+FROM cars
+GROUP BY car_type;
+
+-- 26. Find customers who never rented cars
+SELECT customer_id, customer_name
+FROM customers
+WHERE customer_id NOT IN (
+    SELECT customer_id
+    FROM rentals
+);
+
+-- 27. Find cars rented between two dates
+SELECT *
+FROM rentals
+WHERE pickup_date BETWEEN '2025-05-01' AND '2025-05-10';
+
+-- 28. Display the highest km driven rental
+SELECT *
+FROM rentals
+WHERE km_driven = (
+    SELECT MAX(km_driven)
+    FROM rentals
+);
+
+-- 29. Find owner and car details
+SELECT o.own_name,
+       c.car_name,
+       c.car_type
+FROM owners o
+JOIN cars c
+ON o.own_id = c.own_id;
+
+-- 30. Find customers whose fare amount is above 7000
+SELECT cu.customer_name, r.fare_amount
+FROM rentals r
+JOIN customers cu
+ON r.customer_id = cu.customer_id
+WHERE r.fare_amount > 7000;
+
+-- 31. Find second highest fare
+SELECT MAX(fare_amount) AS second_highest
+FROM rentals
+WHERE fare_amount < (
+    SELECT MAX(fare_amount)
+    FROM rentals
+);
+
+-- 32. Display vacant cars using LEFT JOIN
+SELECT c.car_id, c.car_name
+FROM cars c
+LEFT JOIN rentals r
+ON c.car_id = r.car_id
+WHERE r.car_id IS NULL;
+
+-- 33. Find how many rentals each customer made
+SELECT customer_id, COUNT(*) AS rentals_count
+FROM rentals
+GROUP BY customer_id;
+
+-- 34. Find cars rented more than once
+SELECT car_id, COUNT(*) AS total
+FROM rentals
+GROUP BY car_id
+HAVING COUNT(*) > 1;
+
+-- 35. Display all sedan cars not rented
+SELECT *
+FROM cars
+WHERE car_type = 'Sedan'
+AND car_id NOT IN (
+    SELECT car_id
+    FROM rentals
+);
+
 select car_name,own_name
 from cars c
 join owners o on c.own_id=o.own_id
@@ -269,13 +479,46 @@ SELECT o.own_name,
 FROM owners o
 JOIN cars c
 
+SELECT rental_id,
+       customer_id,
+       car_id,
+       pickup_date,
+       return_date
+FROM rentals
+WHERE pickup_date >= '2025-05-01'
+AND pickup_date <= '2025-05-10';
 
+SELECT o.own_name,
+       c.car_id,
+       c.car_name,
+       c.car_type
+FROM owners o
+JOIN cars c
+ON o.own_id = c.own_id;
 
+SELECT customer_id,
+       customer_name,
+       address
+FROM customers
+ORDER BY customer_name ASC;
 
+SELECT car_id,
+       AVG(fare_amount) AS average_fare
+FROM rentals
+GROUP BY car_id;
 
+-- Using INNER JOIN
 
-
-
+SELECT rentals.rental_id,
+       customers.customer_name,
+       cars.car_name,
+       rentals.pickup_date,
+       rentals.return_date
+FROM rentals
+INNER JOIN customers
+ON rentals.customer_id = customers.customer_id
+INNER JOIN cars
+ON rentals.car_id = cars.car_id;
 
 
 
