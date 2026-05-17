@@ -54,6 +54,47 @@ select order_id,order_date,
 month(order_date) as order_month
 from orders
 
+SELECT *
+FROM orders
+WHERE order_date > '2025-05-05';
+
+-- 19 Orders in Last 7 Days
+SELECT *
+FROM orders
+WHERE order_date >= DATEADD(DAY, -7, GETDATE());
+
+-- 20 Count Orders Per Month
+SELECT 
+MONTH(order_date) AS month_no,
+COUNT(*) AS total_orders
+FROM orders
+GROUP BY MONTH(order_date);
+
+-- 21 Current Year Orders
+SELECT *
+FROM orders
+WHERE YEAR(order_date) = YEAR(GETDATE());
+
+-- 22 Weekend Orders
+SELECT order_id, order_date,
+DATENAME(WEEKDAY, order_date) AS day_name
+FROM orders
+WHERE DATENAME(WEEKDAY, order_date)
+IN ('Saturday', 'Sunday');
+
+-- 23 Order Age
+SELECT order_id, order_date,
+DATEDIFF(DAY, order_date, GETDATE()) AS order_age
+FROM orders;
+
+-- 24 First Day of Current Month
+SELECT DATEADD(MONTH,
+DATEDIFF(MONTH, 0, GETDATE()),
+0) AS first_day;
+
+-- 25 Last Day of Current Month
+SELECT EOMONTH(GETDATE()) AS last_day;
+
 select customer_name,order_id,
 day(order_date) as date
 from customers c
