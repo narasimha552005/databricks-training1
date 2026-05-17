@@ -1,0 +1,86 @@
+
+-- date and time functions
+
+--getdate yyyy-mm-dd
+select getdate()
+
+select getdate()-1
+
+select getdate()+1
+
+--isdate
+-- if the date is given it gives value 1 or else 0
+select isdate(2026-10-10 11:11:11:13)
+select isdate(getdate())
+
+select isdate(hi)
+
+--datepart
+used to tell a part from a date 
+select datepart(day,getdate())
+select datepart(year,getdate())
+select datepart(MONTH,getdate())
+
+select datepart(year,'2002-02-18') as yearname
+
+select datepart(second,getdate()) as seconds
+
+--DateAdd
+it can increment and decrement of the given date or specifc 
+select dateadd(month,2,getdate())
+select dateadd(year,-3,getdate())
+
+--dateDiff
+
+select datediff( month,' 2022-10-20',getdate())
+
+select datediff( YEAR,' 2022-10-20',getdate())
+
+select datediff( YEAR,' 2029-10-20',getdate())
+
+--examples
+
+--CAST is used to convert one datatype to another datatype
+
+SELECT CAST(GETDATE() AS DATE) as today
+
+select cast(getdate() as time) as now
+
+select order_id,order_date,
+year(order_date) as order_year
+from orders
+
+select order_id,order_date,
+month(order_date) as order_month
+from orders
+
+select customer_name,order_id,
+day(order_date) as date
+from customers c
+join orders o on c.customer_id=o.customer_id
+
+select order_id,hotel_item,
+datename(month,order_date) as month_name
+from hotel_details h
+join orders o on h.hotel_id=o.hotel_id
+
+select order_id,partner_name,
+datename(weekday,order_date) as day_name
+from orders o
+join delivery d on o.partner_id=d.partner_id
+
+select order_id,order_date,
+dateadd(day,5,order_date) as post_delivery
+from orders
+
+select order_id,order_date,
+dateadd(month,2,order_date) as advance
+from orders
+
+select order_id,order_date,
+datediff(DAY,order_date,getdate()) as difference
+from orders
+
+select order_id,order_date,
+datediff(month,order_date,getdate()) as gap
+from orders
